@@ -172,14 +172,14 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                            UPDATE Owner
-                            SET 
-                                [Name] = @name, 
-                                Email = @email, 
-                                Address = @address, 
-                                Phone = @phone, 
-                                NeighborhoodId = @neighborhoodId
-                            WHERE Id = @id";
+                        UPDATE Owner
+                        SET 
+                            [Name] = @name, 
+                            Email = @email, 
+                            Address = @address, 
+                            Phone = @phone, 
+                            NeighborhoodId = @neighborhoodId
+                        WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@name", owner.Name);
                     cmd.Parameters.AddWithValue("@email", owner.Email);
