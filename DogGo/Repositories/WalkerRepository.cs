@@ -137,5 +137,49 @@ namespace DogGo.Repositories
                 }
             }
         }
+
+        public List<Walk> GetRecentWalksByWalker(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT a.Id, a.[Date], a.Duration,
+	                        d.[Name] AS OwnerName
+                        FROM Walks a
+	                        LEFT JOIN Walker b ON b.Id = a.WalkerId
+	                        LEFT JOIN Dog c ON c.Id = a.DogId
+	                        LEFT JOIN [Owner] d ON d.Id = c.OwnerId
+                        WHERE a.Id = @id";
+                    // if this were truly going to be 'recent,' could add a WHERE for Date...
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<Walk> walks = new List<Walk>();
+                        while (reader.Read())
+                        {
+                            Walk walk = new Walk()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                                // convert Duration to minutes from seconds
+                                Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
+                                Owner = new Owner()
+                                {
+                                    Name = reader.GetString(reader.GetOrdinal("OwnerName"))
+                                }
+                            };
+                            walks.Add(walk);
+                        }
+
+                        return walks;
+                    }
+                }
+            }
+        }
     }
 }

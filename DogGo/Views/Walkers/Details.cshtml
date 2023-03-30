@@ -1,42 +1,59 @@
-﻿@model DogGo.Models.Walker
+﻿@model DogGo.Models.ViewModels.WalkerProfileViewModel;
 
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
-
 <div>
-    <h4>Walker</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Neighborhood)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Neighborhood.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            <img class="bg-info" src="@Model.ImageUrl" alt="avatar" />
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <h1 class="mb-4">@Model.Walker.Name</h1>
+
+    <section class="container">
+        <img style="width:100px;float:left;margin-right:20px"
+             src=@Model.Walker.ImageUrl />
+        <div>
+            <label class="font-weight-bold">Neighborhood:</label>
+            <span>@Model.Walker.Neighborhood.Name</span>
+        </div>
+    </section>
+
+    <hr class="mt-5" />
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <section class="col-8 container mt-5">
+            <h1 class="text-left">Recent Walks</h1>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Duration</th>
+                </tr>
+                @foreach (Walk walk in Model.RecentWalks)
+                {
+                    <tr>
+                        <td>@walk.Date.ToString("MM/dd/yyyy")</td>
+                        <td>@walk.Owner.Name</td>
+                        <td>@{
+                                double seconds = walk.Duration;
+                                double minutes = seconds / 60.0;
+                                @Math.Floor(minutes)    
+                        } min</td>
+                    </tr>
+                }
+            </table>
+        </section>
+
+        <section class="col-lg-4 col-md-8 container mt-5">
+            <h1>Total Walk Time</h1>
+            <h2>@{
+                    double totalWalkTime = 0; 
+                    foreach (Walk walk in Model.RecentWalks)
+                    {
+                        double seconds = walk.Duration;
+                        double minutes = seconds / 60.0;
+                        totalWalkTime += minutes;
+                    }
+                    @Math.Floor(totalWalkTime)
+                } min</h2>
+        </section>
+    </div>
 </div>

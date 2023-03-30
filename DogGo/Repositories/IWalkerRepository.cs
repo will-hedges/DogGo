@@ -9,5 +9,6 @@ namespace DogGo.Repositories
         List<Walker> GetAllWalkers();
         List<Walker> GetWalkersInNeighborhood(int neighborhoodId);
         Walker GetWalkerById(int id);
+        List<Walk> GetRecentWalksByWalker(int id);
     }
 }

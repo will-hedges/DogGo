@@ -43,7 +43,7 @@ namespace DogGo.Controllers
             List<Dog> dogs = _dogRepo.GetDogsByOwnerId(owner.Id);
             List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
 
-            ProfileViewModel vm = new ProfileViewModel()
+            OwnerProfileViewModel vm = new OwnerProfileViewModel()
             {
                 Owner = owner,
                 Dogs = dogs,
